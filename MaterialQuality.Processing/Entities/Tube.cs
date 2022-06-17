@@ -5,16 +5,18 @@ using System.Text;
 
 namespace MaterialQuality.Processing.Entities
 {
-    public class Tube : QualityCheckBase
+    public class Tube : MaterialBase
     {
         public Tube() : base()
         {            
         }
 
-        internal override void AddQualityChecks()
+        internal override void AddQualityCheckers()
         {
-            QualityChecks.Add(CheckOuterDiameter);
-            QualityChecks.Add(CheckWallThickness);
+            QualityChecks.Add(new QualityChecker(QualityCode.TubeQualityOuterDiameterPlus, CheckOuterDiameterPlus));
+            QualityChecks.Add(new QualityChecker(QualityCode.TubeQualityOuterDiameterMinus, CheckOuterDiameterMinus));
+            QualityChecks.Add(new QualityChecker(QualityCode.TubeQualityWallThicknessPlus, CheckWallThicknessPlus));
+            QualityChecks.Add(new QualityChecker(QualityCode.TubeQualityWallThicknessMinus, CheckWallThicknessMinus));
         }
 
         public long Id { get; set; }
@@ -22,24 +24,32 @@ namespace MaterialQuality.Processing.Entities
         public double WallThickness { get; set; }
         public double Length { get; set; }    
 
-        private void CheckOuterDiameter(Tolerances tolerances)
+        private bool CheckOuterDiameterPlus(Tolerances tolerances)
         {
-            if (tolerances == null) return;
-
-            if (this.OuterDiameter > tolerances.OuterDiameterMax)
-                this.DefectCodes.Add(QualityCode.TubeQualityOuterDiameterPlus);
-            if(this.OuterDiameter < tolerances.OuterDiameterMin)
-                this.DefectCodes.Add(QualityCode.TubeQualityOuterDiameterMinus);
+            if (tolerances == null) return false;
+            if (this.OuterDiameter > tolerances.OuterDiameterMax) return true;
+            return false;
         }
 
-        private void CheckWallThickness(Tolerances tolerances)
+        private bool CheckOuterDiameterMinus(Tolerances tolerances)
         {
-            if (tolerances == null) return;
+            if (tolerances == null) return false;
+            if (this.OuterDiameter < tolerances.OuterDiameterMin) return true;
+            return false;            
+        }
 
-            if (this.WallThickness > tolerances.WallThicknessMax)
-                this.DefectCodes.Add(QualityCode.TubeQualityWallThicknessPlus);
-            if (this.WallThickness < tolerances.WallThicknessMin)
-                this.DefectCodes.Add(QualityCode.TubeQualityWallThicknessMinus);
+        private bool CheckWallThicknessPlus(Tolerances tolerances)
+        {
+            if (tolerances == null) return false;
+            if (this.WallThickness > tolerances.WallThicknessMax) return true;
+            return false;
+        }
+
+        private bool CheckWallThicknessMinus(Tolerances tolerances)
+        {
+            if (tolerances == null) return false;
+            if (this.WallThickness < tolerances.WallThicknessMin) return true;
+            return false;
         }
     }
 }

@@ -10,5 +10,7 @@ namespace MaterialQuality.Processing.Entities
         public double OuterDiameterMin { get; set; }
         public double WallThicknessMax { get; set; }
         public double WallThicknessMin { get; set; }
+        public double LengthMax { get; set; }
+        public double LengthMin { get; set; }
     }
 }
