@@ -63,5 +63,52 @@ namespace MaterialQuality.Tests.Processing
 
             Assert.IsTrue(tube.DefectCodes.Contains(QualityCode.TubeQualityWallThicknessMinus));
         }
+
+        [Test]
+        public void LengthOverMax_GivesQualityCode()
+        {
+            tolerances.LengthMax = 13500;
+            tube.Length = 14000;
+
+            tube.EvaluateQuality(tolerances);
+
+            Assert.IsTrue(tube.DefectCodes.Contains(QualityCode.TubeQualityLengthPlus));
+        }
+
+        [Test]
+        public void LengthUnderMin_GivesQualityCode()
+        {
+            tolerances.LengthMin = 12500;
+            tube.Length = 12400;
+
+            tube.EvaluateQuality(tolerances);
+
+            Assert.IsTrue(tube.DefectCodes.Contains(QualityCode.TubeQualityLengthMinus));
+        }
+
+        [Test]
+        public void TubeWithinTolerances_GivesNoQualityCode()
+        {
+            tolerances = new Tolerances
+            {
+                LengthMin = 12500,
+                LengthMax = 13250,
+                OuterDiameterMax = 139.6,
+                OuterDiameterMin = 136.2,
+                WallThicknessMax = 10.6,
+                WallThicknessMin = 9.7
+            };
+
+            tube = new Tube()
+            {
+                Length = 13000,
+                OuterDiameter = 138,
+                WallThickness = 10
+            };
+
+            tube.EvaluateQuality(tolerances);
+
+            Assert.AreEqual(true, tube.DefectCodes.Count == 0);
+        }
     }
 }

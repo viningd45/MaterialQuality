@@ -17,6 +17,8 @@ namespace MaterialQuality.Processing.Entities
             QualityChecks.Add(new QualityChecker(QualityCode.TubeQualityOuterDiameterMinus, CheckOuterDiameterMinus));
             QualityChecks.Add(new QualityChecker(QualityCode.TubeQualityWallThicknessPlus, CheckWallThicknessPlus));
             QualityChecks.Add(new QualityChecker(QualityCode.TubeQualityWallThicknessMinus, CheckWallThicknessMinus));
+            QualityChecks.Add(new QualityChecker(QualityCode.TubeQualityLengthPlus, CheckLengthPlus));
+            QualityChecks.Add(new QualityChecker(QualityCode.TubeQualityLengthMinus, CheckLengthMinus));
         }
 
         public long Id { get; set; }
@@ -49,6 +51,20 @@ namespace MaterialQuality.Processing.Entities
         {
             if (tolerances == null) return false;
             if (this.WallThickness < tolerances.WallThicknessMin) return true;
+            return false;
+        }
+
+        private bool CheckLengthPlus(Tolerances tolerances)
+        {
+            if (tolerances == null) return false;
+            if (this.Length > tolerances.LengthMax) return true;
+            return false;
+        }
+
+        private bool CheckLengthMinus(Tolerances tolerances)
+        {
+            if (tolerances == null) return false;
+            if (this.Length < tolerances.LengthMin) return true;
             return false;
         }
     }
