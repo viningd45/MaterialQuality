@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace MaterialQuality.Processing.Data.Offline;
 
-public class TubeData : IMaterialData<Tube>
+public class OfflineTubeData : IMaterialData<Tube>
 {
     private List<Tube> _data;
 
-    public TubeData()
+    public OfflineTubeData()
     {
         _data = new List<Tube>();
     }
